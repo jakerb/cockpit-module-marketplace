@@ -128,11 +128,8 @@ $this->module("marketplace")->extend([
 
         foreach($marketplace as $index => $item) {
             $marketplace[$index]->module_installed = false;
-            if(isset($item->module_repo)) {
-                $strip_repo = explode('/', $item->module_repo);
-                if(isset($strip_repo[1]) && in_array("{$strip_repo[1]}-master", $module_dir_list)) {
+            if(isset($item->module_name) && in_array($item->module_name, $module_dir_list)) {
                     $marketplace[$index]->module_installed = true;
-                }
             } 
         }
 

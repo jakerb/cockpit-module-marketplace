@@ -57,13 +57,16 @@ class Admin extends \Cockpit\AuthController {
 
                   $module_install_dir = $this->scan_dir($module_dir)[0];
 
+
+                  
+
                   # Attempt to delete if the module doesn't have a bootstrap file.
                   if($module_install_dir) {
                     if(!is_file($module_dir . $module_install_dir . '/bootstrap.php')) {
                         $success = false;
                         unlink($module_dir . $module_install_dir);
                     } else {
-                        rename($module_install_dir, ($module_dir . $marketplace_list[$module_index]->module_name));
+                        rename(($module_dir . $module_install_dir), ($module_dir . $marketplace_list[$module_index]->module_name));
                     }
                   }
 

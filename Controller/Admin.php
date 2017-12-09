@@ -26,6 +26,24 @@ class Admin extends \Cockpit\AuthController {
         return ($files) ? $files : false;
     }
 
+    public function delete_module($index) {
+        $module_index = intval($index);
+        $module_dir = str_replace('Marketplace/Controller', false, __DIR__);
+        $success = false;
+        $marketplace_list = $this->module("marketplace")->get();
+
+        if(isset($marketplace_list[$module_index])) {
+            if(isset($marketplace_list[$module_index]->module_name)
+            && is_file($module_dir . $marketplace_list[$module_index]->module_name)) {
+
+                unlink($module_dir . $marketplace_list[$module_index]->module_name);
+                $success = true;
+            }
+        }
+
+        return json_encode(array('success' => $success));
+    }
+
     public function install_module($index) {
         $module_index = intval($index);
         $git_url = $this->module("marketplace")->get_git_url();

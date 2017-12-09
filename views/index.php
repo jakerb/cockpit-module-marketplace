@@ -33,6 +33,8 @@
 
                     <p><small>{module.module_description}</small></p>
                     <a class="uk-button uk-button-mini uk-button-primary" data-index="{index}" data-repo="{module.module_repo}" onclick="{ this.parent.install }">{install_label}</a>
+
+                    <a show="{module.module_installed}" data-index="{index}" onclick="{this.parent.remove}" class="uk-button uk-button-mini uk-button-danger">Uninstall</a>
                 </div>
             </div>
 
@@ -95,7 +97,7 @@
                 App.request('/marketplace/install_module/'+install_index).then(function(data) {
 
                     if(data.success) {
-                        App.ui.notify("Module Installed", "danger");
+                        App.ui.notify("Module Installed", "success");
                         $this.install_label = 'Installed'; $this.update();
                     } else {
                         App.ui.notify("Could not install Module", "danger");
@@ -109,11 +111,20 @@
 
         remove(e, region) {
 
-            region = e.item.region;
+            var install_index = parseInt(e.target.getAttribute('data-index'));
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.request('/marketplace/remove_region/'+region, {nc:Math.random()}).then(function(data) {
+                App.request('/marketplace/delete_module/'+module_index).then(function(data) {
+                    if(data.success) {
+                        App.ui.notify("Module Uninstalled", "success");
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 900);
+                    } else {
+                        App.ui.notify("Could not Uninstall Module", "danger");
+                        $this.install_label = 'Error!'; $this.update();
+                    }
 
                     App.ui.notify("Region removed", "success");
 
